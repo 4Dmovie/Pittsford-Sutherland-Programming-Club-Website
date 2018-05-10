@@ -1,0 +1,172 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int INF = 0x7FFFFFFF;
+
+typedef struct NODE *AVLtree;
+
+struct
+NODE{
+    int val;
+    AVLtree right;
+    AVLtree left;
+    int height;
+}NODE;
+
+AVLtree
+LL(AVLtree p){
+    AVLtree q;
+    q = (AVLtree)malloc(sizeof(NODE));
+    q = p -> left;
+    p -> left = q -> right;
+    q -> right = p;
+    p -> height = max(p -> left -> height, p -> right -> height) + 1;
+    q -> height = max(q -> left -> height , q -> right -> height) + 1;
+    return q;
+}
+
+AVLtree
+RR(AVLtree p){
+    AVLtree q;
+    q = (AVLtree)malloc(sizeof(NODE));
+    q = p -> right;
+    p -> right = q -> left;
+    q -> left = p;
+    p -> height = max(p -> left -> height, p -> right -> height) + 1;
+    q -> height = max(q -> left -> height , q -> right -> height) + 1;
+    return q;
+}
+
+AVLtree
+LR(AVLtree p){
+    p -> left = RR(p -> left);
+    p = LL(p);
+    return p;
+}
+
+AVLtree
+RL(AVLtree p){
+    p -> right = LL(p -> right);
+    p = RR(p);
+    return p;
+}
+
+int
+getheight(AVLtree p){
+    if(p == NULL)
+        return -1;
+    else
+        return p -> height;
+}
+
+AVLtree
+Balance(AVLtree root){
+
+    if(root == NULL)
+        return root;
+
+    if(getheight(root -> left) > getheight(root -> right) + 1){
+        if(getheight(root -> left -> left) >= getheight(root -> left -> right)){   //LL
+            root = LL(root);
+        }
+        else{                         // LR
+            root = LR(root);
+        }
+    }
+    if(getheight(root -> right) > getheight(root -> left) + 1){
+        if(getheight(root -> right -> right) >= getheight(root -> right -> left)){  //RR
+            root = RR(root);
+        }
+        else{                           // RL
+            root = RL(root);
+        }
+    }
+    root -> height = max(getheight(root -> left), getheight(root -> right)) + 1;
+    return root;
+}
+
+AVLtree
+Create(AVLtree p, int element){
+    p = (AVLtree)malloc(sizeof(NODE));
+    p -> height = -1;
+    p -> left = NULL;
+    p -> right = NULL;
+    p -> val = element;
+    return p;
+}
+
+AVLtree
+Insert(AVLtree p, int element){
+    if(p == NULL){
+        p = Create(p, element);
+        return p;
+    }
+    if(p -> val < element){
+        p -> right = Insert(p -> right, element);
+    }
+    if(p -> val > element){
+        p -> left = Insert(p -> left, element);
+    }
+    return Balance(p);
+}
+
+AVLtree
+find_min(AVLtree p){
+    AVLtree q = p;
+    while(q -> left != NULL){
+        q = q -> left;
+    }
+    return q;
+}
+
+AVLtree
+Remove(AVLtree p, int element){
+    if(p == NULL)
+        return p;
+    else if(p -> val < element){
+       p -> right = Remove(p -> right, element);
+    }
+    else if(p -> val > element){
+       p -> left = Remove(p -> left, element);
+    }
+    else if(p -> left != NULL && p -> right != NULL){
+        p -> val = find_min(p -> right) -> val;
+        p -> right = Remove(p -> right, p -> val);
+    }
+    else if(p -> right == NULL){
+        p = p -> left;
+    }
+    else{
+        p = p -> right;
+    }
+    return Balance(p);
+}
+
+void
+print(AVLtree p){
+    if(p -> left != NULL)
+        print(p -> left);
+    printf("%d\n", p -> val);
+    if(p -> right != NULL)
+        print(p -> right);
+}
+
+
+int
+main(){
+
+    AVLtree root, kk;
+
+    root = NULL;
+
+   root = Insert(root, 4);
+   root = Insert(root, 7);
+   root = Insert(root, 10);
+   root = Insert(root, 5);
+   print(root);
+   root = Remove(root, 7);
+   print(root);
+
+return 0;
+}

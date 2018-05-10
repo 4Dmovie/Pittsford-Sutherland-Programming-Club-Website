@@ -1,0 +1,76 @@
+C++ Code Developed by Yizuo Chen
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int
+cv1(int n){
+	return n * 2;
+}
+
+int
+cv2(int n){
+	return 5 * (n % 3);
+}
+
+int
+cv3(int n){
+	return 8 * (n / 4);
+}
+
+int
+cv4(int n){
+	int total = 0;
+	while(n != 0){
+		total += (n % 10);
+		n /= 10;
+	}
+	return 10 * total;
+}
+
+int
+cv5(int n){
+	int i;
+	for(i = n - 1; i >= 1; i --){
+		if(n % i == 0)
+			return i * 12;
+	}
+}
+
+int
+convert(char ch){
+	if(ch >= 'A' && ch <= 'E'){
+		return cv1(ch - 'A' + 1);
+	}
+	if(ch >= 'F' && ch <= 'J'){
+		return cv2(ch - 'A' + 1);
+	}
+	if(ch >= 'K' && ch <= 'O'){
+		return cv3(ch - 'A' + 1);
+	}
+	if(ch >= 'P' && ch <= 'T'){
+		return cv4(ch - 'A' + 1);
+	}
+	if(ch >= 'U' && ch <= 'Z'){
+		return cv5(ch - 'A' + 1);
+	}
+}
+
+int
+main(){
+	
+	char ch;
+	int ans;
+	int timer = 0;
+	scanf("%c", &ch);
+	while(ch != '$'){
+		if(ch <= 'Z' && ch >= 'A'){
+			ans = convert(ch);
+			timer = (timer + ans % 26) % 26;
+			printf("%c ", 'A' + timer);
+		}
+		scanf("%c", &ch);
+	}
+
+	return 0;
+}

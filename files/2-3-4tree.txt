@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#define INF 1 << 30
+using namespace std;
+typedef int DataType;
+typedef struct TwoThreeFourTree{
+  DataType ldata;
+  DataType mdata;
+  DataType rdata;
+  int number;
+  struct TwoThreeFourTree *FirstChild;
+  struct TwoThreeFourTree *SecondChild;
+  struct TwoThreeFourTree *ThirdChild;
+  struct TwoThreeFourTree *ForthChild;
+}TwoThreeFourTree;
+
+static
+TwoThreeFourTree
+ClearNewRoot(TwoThreeFourTree *root , DataType k){
+ TwoThreeFourTree *p = (TwoThreeFourTree*) malloc (sizeof(TwoThreeFourTree));
+ p -> ldata = k;
+ p -> mdata = INF;
+ p -> FirstChild = NULL;
+ p -> SecondChild = NULL;
+ p -> ThirdChild = NULL;
+ p -> ForthChild = NULL;
+ p -> number = 1;
+ root = p;
+ return *root;
+}
+
+static
+TwoThreeFourTree
+*TwoThreeFourTreeFind(TwoThreeFourTree *root , DataType k){
+  TwoThreeFourTree *p;
+  p = root;
+  while(p != NULL){
+    if(k > p -> rdata) p = p -> ForthChild;
+    if(k > p -> mdata && k < p -> rdata) p = p -> ThirdChild;
+    if(k > p -> ldata && k < p -> mdata) p = p -> SecondChild;
+    if(k < p -> ldata) p = p -> FirstChild;
+    if(k == p -> ldata) return p;
+    if(k == p -> mdata) return p;
+    if(k == p -> rdata) return p;
+  }
+  return NULL;
+}
+
+static
+TwoThreeFourTree
+*TwoThreeFourTreeInsertSearch(TwoThreeFourTree *root , DataType k){
+  TwoThreeFourTree *s , *p = root;
+  while(p){
+    s = p;
+    if(k < p ->ldata) p = p -> FirstChild;
+    if(p -> ldata <= k < p -> mdata) p = p -> SecondChild;
+    if(p -> mdata <= k < p -> rdata) p = p -> ThirdChild;
+    if(p -> rdata < k) p = p -> ForthChild;
+  }
+  return s;
+}
+
+static
+void
+TwoThreeFourTreeInsert(TwoThreeFourTree *root , DataType k){
+  TwoThreeFourTree *p ,*t;
+  p = (TwoThreeFourTree*) malloc (sizeof(TwoThreeFourTree));
+  p -> ldata = k;
+  p -> mdata = 0;
+  p -> ldata = 0;
+  p -> FirstChild = NULL;
+  p -> SecondChild = NULL;
+  p -> ThirdChild = NULL;
+  p -> ForthChild = NULL;
+  t = TwoThreeFourTreeInsertSearch(root , k);
+  if(t -> number <= 2 ){
+		if(k < t ->ldata) p = t -> FirstChild;
+    if(t -> ldata <= k < t -> mdata) p = t -> SecondChild;
+    if(t -> mdata <= k < t -> rdata) p = t -> ThirdChild;
+    if(t -> rdata < k) p = t -> ForthChild;
+
+  }
+  else{
+
+  }
+}
+
+int
+main(){
+
+return 0;
+}

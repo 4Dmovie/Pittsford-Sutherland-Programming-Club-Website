@@ -1,0 +1,6 @@
+int jia(string s1,string s2){
+ int a[MAXN+1],b[MAXN+1];
+ l1=s1.size()-1;
+ l2=s2.size()-1;
+
+}
